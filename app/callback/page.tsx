@@ -2,11 +2,8 @@
 
 import { useEffect } from "react"
 import { authClient } from "@/lib/auth-client"
-import { useRouter } from "next/navigation"
 
 export default function CallbackPage() {
-  const router = useRouter()
-
   useEffect(() => {
     const saveAccountAndRedirect = async () => {
       const { data: session } = await authClient.getSession()
@@ -17,13 +14,15 @@ export default function CallbackPage() {
           name: session.user.name,
           image: session.user.image
         }))
+        
+        // Redirect to main app
+        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
+        window.location.href = siteUrl
       }
-      
-      // Redirect will be handled by better-auth
     }
 
     saveAccountAndRedirect()
-  }, [router])
+  }, [])
 
   return (
     <div className="flex min-h-svh items-center justify-center">
