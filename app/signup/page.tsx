@@ -1,6 +1,7 @@
 import { SignupForm } from "@/components/signup-form"
 import { GalleryVerticalEndIcon } from "lucide-react"
 import { Metadata } from "next"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
   title: "Sign Up - bLAZEnEURO",
@@ -17,7 +18,9 @@ export default function SignupPage() {
           </div>
           bLAZEnEURO
         </a>
-        <SignupForm />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SignupForm />
+        </Suspense>
       </div>
     </div>
   )
