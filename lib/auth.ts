@@ -31,6 +31,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://local.blazeneuro.com:3001",
     "https://blazeneuro.com",
     "https://auth.blazeneuro.com"
   ],
