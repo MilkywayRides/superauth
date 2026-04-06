@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendVerificationEmail(email: string, otp: string) {
   try {
     await resend.emails.send({
-      from: 'BlazeNeuro <onboarding@resend.dev>',
+      from: 'BlazeNeuro <noreply@blazeneuro.com>',
       to: email,
       subject: 'Verify your email',
       html: `
