@@ -3,6 +3,8 @@
 import { useEffect } from "react"
 import { authClient } from "@/lib/auth-client"
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
+
 export default function CallbackPage() {
   useEffect(() => {
     const saveAccountAndRedirect = async () => {
@@ -16,8 +18,7 @@ export default function CallbackPage() {
         }))
         
         // Redirect to main app
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
-        window.location.href = siteUrl
+        window.location.href = SITE_URL
       }
     }
 
