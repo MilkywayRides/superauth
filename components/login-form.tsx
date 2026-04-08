@@ -48,7 +48,7 @@ export function LoginForm({
     setError("")
     setIsLoading(true)
     try {
-      const defaultCallback = redirectUrl || "http://localhost:3001"
+      const defaultCallback = redirectUrl || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
       const result = await authClient.signIn.email({ 
         email, 
         password,
@@ -77,7 +77,7 @@ export function LoginForm({
   }
 
   const handleGoogleLogin = async () => {
-    const defaultCallback = redirectUrl || "http://localhost:3001"
+    const defaultCallback = redirectUrl || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
     const callbackURL = isOAuth && oauthClientId && oauthRedirectUri && oauthState
       ? `${window.location.origin}/oauth/v1/callback?client_id=${oauthClientId}&redirect_uri=${encodeURIComponent(oauthRedirectUri)}&state=${oauthState}${oauthScope ? `&scope=${oauthScope}` : ''}`
       : defaultCallback
@@ -89,7 +89,7 @@ export function LoginForm({
   }
 
   const handleGithubLogin = async () => {
-    const defaultCallback = redirectUrl || "http://localhost:3001"
+    const defaultCallback = redirectUrl || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
     const callbackURL = isOAuth && oauthClientId && oauthRedirectUri && oauthState
       ? `${window.location.origin}/oauth/v1/callback?client_id=${oauthClientId}&redirect_uri=${encodeURIComponent(oauthRedirectUri)}&state=${oauthState}${oauthScope ? `&scope=${oauthScope}` : ''}`
       : defaultCallback

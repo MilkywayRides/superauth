@@ -46,14 +46,14 @@ export function VerifyEmailForm() {
         email: signupData.email,
         password: signupData.password,
         name: signupData.name,
-        callbackURL: "http://localhost:3001"
+        callbackURL: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
       })
 
       if (signupResult.error) {
         setError(signupResult.error.message ?? "Signup failed")
       } else {
         sessionStorage.removeItem('pendingSignup')
-        window.location.href = "http://localhost:3001"
+        window.location.href = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
       }
     } else {
       setError(result.error || "Verification failed")

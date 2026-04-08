@@ -58,11 +58,11 @@ export function SignupForm({
   }
 
   const handleGoogleSignup = async () => {
-    await authClient.signIn.social({ provider: "google", callbackURL: "http://localhost:3001" })
+    await authClient.signIn.social({ provider: "google", callbackURL: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001" })
   }
 
   const handleGithubSignup = async () => {
-    await authClient.signIn.social({ provider: "github", callbackURL: "http://localhost:3001" })
+    await authClient.signIn.social({ provider: "github", callbackURL: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001" })
   }
 
   return (

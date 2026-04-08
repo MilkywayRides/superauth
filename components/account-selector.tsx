@@ -49,7 +49,7 @@ export function AccountSelector({ className, ...props }: React.ComponentProps<"d
     
     if (session?.user && session.user.email === account.email) {
       // User is already logged in, redirect directly to main site
-      window.location.href = "http://localhost:3001"
+      window.location.href = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001"
       return
     }
     
