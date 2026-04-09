@@ -45,7 +45,8 @@ export const auth = betterAuth({
   },
   advanced: {
     crossSubDomainCookies: {
-      enabled: true
+      enabled: true,
+      domain: ".blazeneuro.com"
     }
   }
 })
