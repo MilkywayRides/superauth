@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { auth } from '@/lib/auth'
 
 const allowedOrigins = [
   'http://localhost:3000',
@@ -11,8 +12,9 @@ const allowedOrigins = [
   'https://www.blazeneuro.com'
 ]
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const origin = request.headers.get('origin')
+  const pathname = request.nextUrl.pathname
 
   // Handle preflight
   if (request.method === 'OPTIONS') {
@@ -25,6 +27,29 @@ export function middleware(request: NextRequest) {
     response.headers.set('Access-Control-Allow-Credentials', 'true')
     response.headers.set('Access-Control-Max-Age', '86400')
     return response
+  }
+
+  // Check if user needs phone verification
+  if (pathname !== '/phone-verify' && pathname !== '/login' && pathname !== '/signup' && !pathname.startsWith('/api/')) {
+    try {
+      const session = await auth.api.getSession({ headers: request.headers })
+      
+      if (session?.user?.id) {
+        const { db } = await import('@/lib/db')
+        const { user } = await import('@/lib/schema')
+        const { eq } = await import('drizzle-orm')
+        
+        const dbUser = await db.select().from(user).where(eq(user.id, session.user.id)).limit(1)
+        
+        if (dbUser[0] && !dbUser[0].phone) {
+          const redirectUrl = new URL('/phone-verify', request.url)
+          redirectUrl.searchParams.set('redirectTo', pathname)
+          return NextResponse.redirect(redirectUrl)
+        }
+      }
+    } catch (error) {
+      console.error('[Middleware] Phone check error:', error)
+    }
   }
 
   const response = NextResponse.next()
@@ -50,5 +75,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/:path*', '/oauth/:path*']
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)']
 }
