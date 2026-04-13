@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         client_id: process.env.GITHUB_CLIENT_ID,
         client_secret: process.env.GITHUB_CLIENT_SECRET,
         code,
-        redirect_uri: `${process.env.BETTER_AUTH_URL}/api/auth/github/android/callback`
+        redirect_uri: `${process.env.BETTER_AUTH_URL}/api/auth/callback/github`
       })
     })
 
