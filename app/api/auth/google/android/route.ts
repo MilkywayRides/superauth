@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { OAuth2Client } from "google-auth-library"
 import { drizzle } from "drizzle-orm/postgres-js"
 import postgres from "postgres"
-import { users, sessions, accounts } from "@/lib/schema"
+import { user, session, account } from "@/lib/schema"
 import { eq } from "drizzle-orm"
 
 const client = new OAuth2Client(process.env.GOOGLE_WEB_CLIENT_ID || process.env.GOOGLE_CLIENT_ID)
@@ -35,22 +35,24 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if user exists
-    const existingUsers = await db.select().from(users).where(eq(users.email, payload.email))
-    let user = existingUsers[0]
+    const existingUsers = await db.select().from(user).where(eq(user.email, payload.email))
+    let userRecord = existingUsers[0]
 
-    if (!user) {
+    if (!userRecord) {
       // Create new user
-      const [newUser] = await db.insert(users).values({
+      const [newUser] = await db.insert(user).values({
+        id: crypto.randomUUID(),
         email: payload.email,
         name: payload.name || payload.email.split("@")[0],
         emailVerified: true,
         image: payload.picture
       }).returning()
-      user = newUser
+      userRecord = newUser
 
       // Create account link
-      await db.insert(accounts).values({
-        userId: user.id,
+      await db.insert(account).values({
+        id: crypto.randomUUID(),
+        userId: userRecord.id,
         accountId: payload.sub,
         providerId: "google",
         accessToken: idToken,
@@ -62,8 +64,9 @@ export async function POST(req: NextRequest) {
     const sessionToken = crypto.randomUUID()
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
 
-    await db.insert(sessions).values({
-      userId: user.id,
+    await db.insert(session).values({
+      id: crypto.randomUUID(),
+      userId: userRecord.id,
       token: sessionToken,
       expiresAt
     })
@@ -71,10 +74,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       token: sessionToken,
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role || "user"
+        id: userRecord.id,
+        email: userRecord.email,
+        name: userRecord.name,
+        role: userRecord.role || "user"
       }
     })
   } catch (error: any) {
