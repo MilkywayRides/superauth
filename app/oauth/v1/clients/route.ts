@@ -28,7 +28,7 @@ clients.set('bn_9ede824872be0ca76131cc37626e5717', {
   id: 'bn_9ede824872be0ca76131cc37626e5717',
   secret: '7abd910be52c8d55d68fc3ef8ee8e80f901963488b307c3187708a153b51be18',
   name: 'Data Flow',
-  redirectUris: ['http://localhost:3000/api/auth/callback'],
+  redirectUris: ['http://localhost:3000/api/auth/callback/blazeneuro'],
   allowedOrigins: ['http://localhost:3000'],
   createdAt: new Date().toISOString()
 })
