@@ -33,6 +33,16 @@ clients.set('bn_9ede824872be0ca76131cc37626e5717', {
   createdAt: new Date().toISOString()
 })
 
+// Register SBstyleHub mobile client
+clients.set('bn_5cb1a229cfec0c033b048d6e27f0f855', {
+  id: 'bn_5cb1a229cfec0c033b048d6e27f0f855',
+  secret: 'db4f783bc8c0f38d5c5de0df3c7632278f37dc192b572edd1dfd95d175efcb87',
+  name: 'SBstyleHub',
+  redirectUris: ['http://10.55.14.40:3000/api/auth/callback/mobile'],
+  allowedOrigins: ['http://10.55.14.40:3000'],
+  createdAt: new Date().toISOString()
+})
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
